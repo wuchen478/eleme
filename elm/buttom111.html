@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+    <!--[if lt IE 9]-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" rel="external nofollow"></script>
+    <link href="framework/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <style>
+
+        .scrollTopZone {
+            z-index: 8;
+            margin: 0;
+            position: fixed;
+            right: 3rem;
+            bottom: 8rem;
+            cursor: pointer;
+            width: 0rem;
+            height: 0rem;
+            background: rgba(0, 151, 255, 1);
+            color: rgba(0, 151, 255, 1);
+            font-size: 2rem;
+            text-align: center;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="css/myself.css">
+</head>
+<body>
+<div id="app">
+
+    <div v-if="mm" class="text-right">
+        <gouwu>
+            <button v-on:click="clos">关闭</button>
+        </gouwu>
+    </div>
+    <!--首页-->
+    <div>
+        <div class="container-fluid bg-danger fixed-top">
+            <router-view name="n0"></router-view>
+            <router-view name="n1"></router-view>
+        </div>
+        <router-view name="n2"></router-view>
+        <router-view name="n3"></router-view>
+    </div>
+
+
+    <!--进入订单-->
+    <div>
+        <router-view name="dd1">我的订单</router-view>
+        <router-view name="dd2">我的订单</router-view>
+    </div>
+
+    <!--    进入商家列表-->
+    <div>
+        <router-view name="ss1">商家列表</router-view>
+        <router-view name="ss2"></router-view>
+    </div>
+
+    <!--进入用户界面-->
+    <div>
+        <router-view name="user1"></router-view>
+        <router-view name="user2"></router-view>
+    </div>
+    <!--新订单界面-->
+    <div>
+        <router-view name="newdd1">确认订单</router-view>
+        <router-view name="newdd2"></router-view>
+    </div>
+    <!--进入在线支付界面-->
+    <div>
+        <router-view name="payfor1">在线支付</router-view>
+        <router-view name="payfor2"></router-view>
+    </div>
+    <div>
+        <goTopCpn></goTopCpn>
+    </div>
+    <div>
+        <router-view name="faxian"></router-view>
+    </div>
+
+    <dibu v-if="!mm"></dibu>
+</div>
+<template id="dbzj">
+    <div class="container-fluid">
+        <div class="bg-danger fixed-bottom row text-center ">
+            <router-link to="/index" class="col-2 offset-2"><i class="fa fa-home"></i>
+                <p>首页</p>
+            </router-link>
+            <router-link to="/t1" class="col-2"><i class="fa fa-compass"></i>
+                <p>发现</p></router-link>
+            <router-link to="/dingdan" class="col-2"><i class="fa fa-file-text-o"></i>
+                <p>订单</p></router-link>
+            <router-link to="/user" class="col-2"><i class="fa fa-user-o"></i>
+                <p>我的</p></router-link>
+        </div>
+
+    </div>
+</template>
+<!--顶部模板包括地址和搜索框-->
+<template id="dingbu">
+    <div class="bg-danger dingbu  ">
+        <div>
+            <i class="icon-location"></i>
+        </div>
+        <div>沈阳市规划大厦<i class="fa fa-caret-down"></i></div>
+    </div>
+</template>
+<template id="sousuo">
+    <div class="input-group  bg-danger inputt     ">
+
+        <i class="fa fa-search input-group-text "> </i><input type="text" class="form-control" placeholder="输入你想要的商家">
+
+    </div>
+</template>
+
+
+<!--订单组件-->
+<template id="dingdan">
+    <div class="midbox">
+
+        <div class="</div>">
+            <div class="fixed-top  row midboxtitle bg-dark">
+                <button class="col-4" v-on:click="s1(1)">全部订单</button>
+                <button class="col-4" v-on:click="s1(2)">已付款订单</button>
+                <button class="col-4" v-on:click="s1(3)">未付款订单</button>
+            </div>
+            <ul>
+
+                <li v-for="(item,index) in datas.dingdans" v-if="!item.pay">
+                    <div class="dingdanbox" v-if="ustatu">
+                        <div class=" row ">
+                            <div class="  row    shangjia">
+                            <span class="col-3 text-left">
+                                {{item.shop}}
+                                <button v-on:click="openfood(item)">展开</button></span>
+                                <span class="col-9  text-right">总价: &nbsp;&nbsp;{{item.money}} &nbsp;&nbsp;<button
+                                        v-on:click="seedpay(item)">去结账</button> </span>
+                            </div>
+
+                            <!--                <div v-if="item.foods.openswitch">-->
+                            <ul>
+
+                                <li v-for="fo in item.foods" class="row    text-left" v-if="item.openswitch">
+                                    <div class="col-3"> {{fo.name}} &nbsp; ×{{fo.num}}</div>
+                                    <span class="col-9 text-right">{{fo.price}}¥</span>
+                                    <span class="col-3">配送费</span>
+                                    <span class="col-9 text-right">{{item.peisong}}¥</span>
+                                </li>
+
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </li>
+
+
+                <li v-for="(item,index) in datas.dingdans" v-if="item.pay">
+                    <div class="dingdanbox" v-if="statu">
+                        <div v-show="statu" class="row">
+                            <div class="row  shangjia">
+                                <span class="col-3 text-left ">{{item.shop}}<button
+                                        v-on:click="openfood(item)">展开</button></span>
+                                <span class="col-9 text-right">总价: &nbsp;&nbsp;{{item.money}} &nbsp;&nbsp;已经支付</span>
+                            </div>
+
+                            <!--                <div v-if="item.foods.openswitch">-->
+                            <ul>
+
+                                <li v-for="fo in item.foods" class=" row" v-if="item.openswitch">
+                                    <div class="col-3"> {{fo.name}} &nbsp ×{{fo.num}}</div>
+                                    <span class="col-9 text-right">{{fo.price}}¥</span>
+                                    <span class="col-3">配送费</span>
+                                    <span class="col-9 text-right">{{item.peisong}}¥</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+
+        </div>
+
+
+        <!--                </div>-->
+
+
+    </div>
+
+</template>
+
+<!--商家列表组件-->
+
+
+<!--排头组件-->
+<template id="paitou">
+    <div class="fixed-top bg-danger text-center paitou  ">
+        <slot></slot>
+    </div>
+</template>
+
+
+<!--服务类别和广告-->
+<template id="shoptype">
+    <div class="shoptype">
+        <div class="row">
+
+            <div class=" text-center col-2 " v-for="(items,index) in $root.shoptype"
+                 v-bind:class="{'offset-1':index==0 || index==5}">
+                <router-link to="/lowshops">
+                    <img v-bind:src="items.url"><br>
+                    <span>美食</span>
+                </router-link>
+            </div>
+        </div>
+        <div class="bg-dark ">
+           实在不知道插什么图片了
+        </div>
+    </div>
+</template>
+
+
+<!--商家列表-->
+<template id="shops">
+    <div >
+        <div v-for="item in $root.shops" class="row shangjiabox ">
+            <div class="col-2"><img v-bind:src="item.url" alt=""></div>
+            <div class="col-5 offset-1 text-left">
+                <h2>{{item.name}}</h2>
+                <p><i class="fa fa-star-o xxx" v-for="i in item.level"></i>{{item.statu}}</p>
+                <p>{{item.send}}</p>
+                <p>{{item.lab}}</p>
+                <ul>
+                    <li v-for="i in item.sal">{{i}}</li>
+                </ul>
+            </div>
+            <div class="col-2 text-right">
+                <span class="bg-danger">蜂鸟专送</span>
+                <p>{{item.time}}</p>
+                <p>{{item.sal.length}}个活动</p>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<!--商家面板2-->
+<template id="lowshops">
+    <div>
+        <div v-for="(item,index) in $root.shops" class="row shangjiabox ">
+            <div class="col-2"><label v-bind:for="index+'我'"><img v-bind:src="item.url" alt=""></label></div>
+            <div class="col-6 text-left">
+                <label v-bind:for="index+'我'">
+                    <h2>{{item.name}}</h2>
+                    <p>{{item.send}}</p>
+                    <p>{{item.lab}}</p>
+                </label>
+            </div>
+            <button v-show="false" v-on:click="sendd(item)" v-bind:id="index+'我'">99999</button>
+        </div>
+    </div>
+</template>
+
+
+<!--商家物品面板-->
+
+<template id="gouwu">
+    <div class="fixed-bottom bg-light" style="height: 60% ">
+        <slot></slot> <!--留关闭槽-->
+        <div class="text-center">
+            <!--商家信息区域-->
+            <img v-bind:src="$root.mm.url" alt="" style="width: 50px;height: 50px"> <br>
+            {{$root.mm.name}} <br>
+            {{$root.mm.send}} <br>
+            {{$root.mm.lab}} <br>
+        </div>
+        <div v-for="item in $root.mm.foods" class="container row">
+            <!--商家食物区域 6 2 布局-->
+            <div class="col-6 offset-2 row">
+                <!--食品信息区域-- 占9-->
+                <div class="col-3">
+                    <!--图片区域-->
+                    <img v-bind:src="item.url" alt="" style="width: 50px;height: 50px">
+                </div>
+                <div class="col-8">
+                    <!--食物区域-->
+                    <h1>{{item.name}}</h1>
+                    {{item.name}}
+                    {{item.price}}&nbsp;&nbsp;&nbsp;¥
+                </div>
+            </div>
+            <div class="col-2">
+                <!--操作面板-->
+                <button v-on:click="item.num--" v-bind:readonly="item.num">-</button>
+                {{item.num}}
+                <button v-on:click="item.num++">+</button>
+
+            </div>
+
+
+        </div>
+        <div class="row fixed-bottom  center-block" style="height: 50px;line-height: 50px">
+            <div class="col-9 bg-danger">选购的商品总价为:{{$root.total}}</div>
+            <div class="col-3 bg-success">
+                <router-link to="/newdd">
+                    <button v-on:click="newdd">去下单</button>
+                </router-link>
+            </div>
+        </div>
+    </div>
+</template>
+<template id="faxian">
+
+
+</template>
+
+<!--我的信息面板-->
+<template id="user">
+    <div class="fixed-top">
+        登录
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">手机号码：</span>
+        </div>
+        <input type="text" class="form-control" placeholder="请输入手机号">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">密码：</span>
+        </div>
+        <input type="password" class="form-control" placeholder="请输入密码">
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <button type="submit" class="btn btn-success btn-lg col-10 offset-1" >登录</button>
+        </div>
+    </div>
+    <br/>
+    <router-link to="/user">
+        <div class="container-fluid">
+            <div class="row">
+                <button type="submit" class="btn btn-primary btn-lg col-10 offset-1" >去注册</button>
+            </div>
+        </div>
+    </router-link>
+        <div>
+            <div class="fixed-top text-center">
+                注册
+            </div>
+            <form>
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <span class="input-group-text text-center m-3"> 手机号码</span>
+                    </div>
+                    <input type="tel" class="form-control text-center" style="border: none"  placeholder="请输入手机号">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <span class="input-group-text text-center"> 输入密码：</span>
+                    </div>
+                    <input type="password" class="form-control text-center" style="border: none" placeholder="请输入密码">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <span class="input-group-text">确认密码：</span>
+                    </div>
+                    <input type="tel" class="form-control text-center" style="border: none"  placeholder="请确认密码">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <span class="input-group-text text-center">用户姓名：</span>
+                    </div>
+                    <input type="password" class="form-control text-center" style="border: none" placeholder="请输入您的用户名">
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <span class="input-group-text text-center">性别：</span>
+                    </div>
+                    <input type="radio" name="sex" checked style="width:4vw;height:  2.2vw;text-align: center">男
+                    <input type="radio" name="sex" style="width:4vw;height: 2.2vw;text-align: center">女
+                </div>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary btn-lg col-10 offset-1"  >注册</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</template>
+
+
+<!--订单界面-->
+<template id="newdd">
+    <div><!--组件根节点-->
+        <div class="" style="height: 20px">
+            <!--配送地址信息-->
+        </div>
+        <!--订单页面-->
+        <div>
+            {{$root.newdingdan.name}}
+
+        </div>
+        <div class="container row" v-for=" item in $root.newdingdan.foods">
+            <div class="col-3">
+                <img v-bind:src="item.url" style="width: auto" alt="">
+            </div>
+            <div class="col-6">
+                {{item.name}}×
+                {{item.num}}
+            </div>
+            <div class="col-3 text-right ">
+                <span>{{item.price}}</span>
+            </div>
+        </div>
+        <!--        <div v-for="item in $root.newdingdan.foods">
+                    {{item}}
+                    {{item}}
+                    {{item}}
+                    {{item}}
+                </div>-->
+        <router-link to="/payfor">
+            <button>确定,去付款</button>
+        </router-link>
+
+    </div>
+</template>
+
+<template id="payfor">
+    <div>
+        <!--组件根节点-->
+
+        <div class="container ">
+            <!--支付方式选择-->
+            <label><img src="img/alipay.png" alt="" style="width: auto"> <input type="radio" name="paytype"></label><br>
+            <label><img src="img/alipay.png" alt="" style="width: auto"> <input type="radio" name="paytype"></label>
+        </div>
+        <div class="text-center">
+            <!--跳转支付-->
+            <button>提交订单</button>
+        </div>
+
+
+    </div>
+
+</template>
+
+
+<!--返回顶部组件-->
+<template id="goTopTemp">
+    <transition enter-active-class="animated fadeIn">
+        <div class="scrollTopZone" v-if="scrollTop>100" @click="goTop">
+            <i class="fa fa-arrow-circle-o-up"></i>
+        </div>
+    </transition>
+</template>
+
+<!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
+<script src="js/jquery-3.3.1.js" rel="external nofollow"></script>
+<!-- 包括所有已编译的插件 -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/vue-resources.js"></script>
+<script src="js/vue-router.js"></script>
+<script>
+    //返回顶部组件
+
+    let goTopCpn = Vue.extend({
+        template: "#goTopTemp",
+        data: function () {
+            return {
+                scrollTop: 0,
+            };
+        }, methods: {
+            goTop() {
+                //这里的原理是用定时器每5毫秒执行一次函数，每一次滚轮px减10，直到0为止,首先判断是否存在
+                let timeCouter = setInterval(function () {
+                    if (
+                        window.pageYOffset ||
+                        document.documentElement.scrollTop ||
+                        document.body.scrollTop
+                    ) {
+                        window.pageYOffset -= 10;
+                        document.documentElement.scrollTop -= 10;
+                        document.body.scrollTop -= 10;
+                        console.log("打开")
+                        console.log(window.pageYOffset)
+                        console.log(document.documentElement.scrollTop)
+                        console.log(document.body.scrollTop)
+
+                        if (window.pageYOffset == 0) {
+                            window.clearInterval(timeCouter); //scrollTop到0时就移除定时器
+                            console.log("关闭")
+                        } else if (document.documentElement.scrollTop == 0) {
+                            window.clearInterval(timeCouter); //scrollTop到0时就移除定时器
+                            console.log("关闭")
+                        }
+                    }
+                }, 5)
+
+            },
+            getScrollTop() {
+                this.scrollTop =
+                    window.pageYOffset ||
+                    document.documentElement.scrollTop ||
+                    document.body.scrollTop;
+            },
+        },
+        mounted() {
+            window.addEventListener("scroll", this.getScrollTop);
+        },
+        computed: {
+            topDistance: function () {
+                return (value = this.scrollTop > 100 ? true : false);
+            },
+        }
+    });
+    Vue.component("gotopcpn", goTopCpn);
+
+
+    /**
+     * payfor
+     * */
+    let payfor = Vue.extend(
+        {
+            template: "#payfor",
+        }
+    )
+    let faxian= Vue.extend(
+        {
+            template: "#faxian",
+        }
+    )
+    Vue.component("faxian", faxian);
+    /**
+     * 新订单界面
+     * */
+    let newdd = Vue.extend(
+        {
+            template: "#newdd",
+        }
+    )
+
+
+    /**
+     * 制作我的信息组件
+     */
+    let user = Vue.extend(
+        {
+            template: "#user",
+        }
+    )
+    Vue.component("user", user);
+
+    /**
+     * 购物
+     */
+    let gouwu = Vue.extend(
+        {
+            template: "#gouwu",
+            data: function () {
+                return {
+                    data: [],
+                }
+            },
+            mounted: function () {
+                this.$on("nono", function (data) {
+                    console.log(11111111111111)
+                    console.log(data)
+                })
+            },
+            methods: {
+                newdd: function () {
+                    this.$root.newdingdan = this.$root.mm;
+                    console.log("newdd")
+                    this.$root.mm = null
+                }
+            },
+            props: {msg: {}}
+        }
+    )
+    Vue.component("gouwu", gouwu)
+
+    /**
+     * 底部模板
+     * @type {VueComponent|jQuery|any|void}
+     */
+    let ttype = "我的";
+    let dibu = Vue.extend(
+        {
+            template: "#dbzj",
+            props: {}
+        }
+    )
+    Vue.component("dibu", dibu)
+    /**
+     * 顶部模板
+     * @type {VueComponent|jQuery|any|void}
+     */
+    let dingbu = Vue.extend(
+        {
+            template: "#dingbu"
+        }
+    )
+
+    /**
+     * 搜索框模板
+     * @type {VueComponent|jQuery|any|void}
+     */
+    let sousuo = Vue.extend(
+        {
+            template: "#sousuo",
+            props: {}
+        }
+    )
+
+
+    /**
+     *功能分类组件
+     */
+    let shoptype = {
+        template: "#shoptype",
+    }
+
+
+    /**
+     * 订单内容组件
+     *
+     */
+    let dingdan = Vue.extend(
+        {
+            template: "#dingdan",
+            data: function () {
+                return {
+                    datas: [],
+                    statu: true,
+                    ustatu: true,
+
+                }
+            },
+            mounted: function () {
+                this.$http.get(`dingdan.json`).then(
+                    function (res) {
+                        console.log(res.body.datazoom);
+                        this.datas = res.body.datazoom;
+                        this.$root.dingdans = this.datas.dingdans
+                        console.log(this.datas)
+                        console.log(this.datas.type)
+                        ttype = this.datas.type;
+                        console.log(ttype)
+                        console.log(this.datas.dingdans)
+                    }
+                )
+            },
+            /*       mounted:function (){
+                       console.log(this.datas)
+                   },*/
+            props: {},
+            methods: {
+                openfood: function (x) {
+                    console.log(this.datas)
+                    console.log(x.foods.openswitch)
+                    x.openswitch = !x.openswitch
+                    console.log(x.foods.openswitch)
+                },
+                s1: function (x) {
+                    if (x == 1) {
+                        this.statu = true;
+                        this.ustatu = true
+                    } else if (x == 3) {
+                        this.statu = false;
+                        this.ustatu = true
+                    } else if (x == 2) {
+                        this.statu = true
+                        this.ustatu = false;
+                    }
+                },
+
+                /*
+                                seedpay: function (item) {
+                                    this.$http.post('/dingdan.json', item, {emulateJSON: true}).then(function (res) {
+                                        document.write(res.body);
+                                    })
+                                }*/
+
+            }
+
+        }
+    )
+
+    let lowshops = Vue.extend(
+        {
+            template: "#lowshops",
+            methods: {
+                sendd: function (x) {
+                    console.log(x)
+                    this.$root.mm = (x);
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                }
+            },
+        }
+    )
+
+    /*排头组件*/
+    let paitou = Vue.extend(
+        {
+            template: "#paitou",
+            data: function () {
+                return {
+                    ptype: ""
+                }
+            },
+            beforeMount: function () {
+                this.ptype = ttype;
+                console.log(this.ptype)
+            },
+            props: {}
+        }
+    )
+    let shops = {
+        template: "#shops"
+    }
+
+    let routes = [
+        {
+            path: "/index", components: {
+                n0: dingbu,
+                n1: sousuo,
+                n2: shoptype,
+                n3: shops
+            },
+        },
+        {path: "/", redirect: "/index"},
+        {
+            path: "/dingdan", components: {
+                dd1: paitou,
+                dd2: dingdan,
+
+                // default: paitou,
+            }
+        },
+        {
+            path: "/lowshops", components: {
+                ss1: paitou,
+                ss2: lowshops
+            }
+        },
+        {
+            path: "/user", components: {
+                user1: paitou, user2: user
+
+            }
+        },
+        {
+            path: "/newdd", components: {
+                newdd1: paitou,
+                newdd2: newdd
+            }
+        }, {
+            path: "/payfor", components: {
+                payfor1: paitou,
+                payfor2: payfor,
+            }
+        }
+        /*      {
+                  path:"/*",components: {default:dingbu,
+                      n1:sousuo
+                  }
+              }*/
+
+    ]
+    let myroute = new VueRouter(
+        {routes: routes}
+    )
+
+
+    const vue = new Vue({
+        el: "#app",
+        data: {
+            shoptype: [],
+            shops: [],
+            mm: null,
+            dingdans: [],
+            newdingdan: null,
+            // scroo:null
+
+        },
+        methods: {
+            gaibian: function () {
+                console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+            },
+            clos: function () {
+                this.mm = null;
+            },
+            getScrollTop: function () {// 由于浏览器的兼容性问题,本例中通过三种方式判断偏移的位置
+                this.scroo =
+                    window.pageYOffset ||
+                    document.documentElement.scrollTop ||
+                    document.body.scrollTop;
+            }
+
+        },
+        components: {
+            lowshops: lowshops,
+            gouwu: gouwu
+        },
+        computed: {
+            total: function () {
+                for (var i = 0; i < this.mm.foods.length; i++) {
+                    let m = 0;
+                    console.log(this.mm.foods[i])
+                    console.log(this.mm.foods[i].num)
+                    this.mm.foods.total += this.mm.foods[i].price * this.mm.foods[i].num;
+                    m = this.mm.foods[i].price * this.mm.foods[i].num + m
+                    return m;
+                }
+            }
+        },
+        filters: {
+            filter01: function () {
+            }
+        },
+        mounted: [function () {
+            this.$http.get(`shoptype.json`).then(
+                function (res) {
+                    console.log(res)
+                    this.shoptype = res.body.datazoom
+                    console.log(this.shoptype)
+                }, function () {
+
+                }
+            )
+        },
+            function () {
+                this.$http.get("sjlb.json").then(
+                    function (res) {
+                        console.log(res);
+                        this.shops = res.body.datazoom.shop;
+                        console.log(this.shops);
+                    }
+                )
+            }
+            /*  function (){
+                  let timeCouter = setInterval(function (){
+                      console.log("111")
+                      console.log(window.pageYOffset ||
+                          document.documentElement.scrollTop ||
+                          document.body.scrollTop)
+                      this.scroo=window.pageYOffset ||
+                          document.documentElement.scrollTop ||
+                          document.body.scrollTop;
+                      if (this.scroo>20){
+                          clearInterval(timeCouter)
+                      }
+                      $("vue").scroo=this.scroo
+                  },1)
+                  console.log(this.scroo)
+
+
+
+
+              }*/
+        ],
+        router: myroute
+    })
+    $(document).ready(function () {
+        console.log(1)
+        /*    if($(".dingbu").length){
+                $(".dingbu").removeClass("fixed-top");
+                $(".topBanner .currentLoc").css("display", "block");
+            }*/
+        $(window).scroll(function () {
+            console.log(1)
+
+            if ($(".dingbu").length) {//如果存在location定位则使用A处理方案
+                if ($(window).scrollTop() > 30) {//注意在css样式定义中,currentLoc被定义为60了
+                    $(".dingbu").css("display", "none");
+                    $(".shoptype").css("margin-top", "40px");
+                    console.log(1)
+                } else {
+                    $(".dingbu").css("display", "block");
+                    $(".shoptype").css("margin-top", "70px");
+                }
+            }
+        })
+    });
+</script>
+
+
+</body>
+</html>

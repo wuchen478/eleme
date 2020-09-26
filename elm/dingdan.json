@@ -1,0 +1,41 @@
+{
+  "page": 14,
+  "nopage": 3,
+  "datazoom": {
+    "type": "我的订单",
+    "dingdans": [
+      {
+        "shop": "霸王店",
+        "pay": true,
+        "money": 55,
+        "foods": [
+          {
+            "name": "三鲜水饺",
+            "num": 3,
+            "price": 15
+          }
+        ],
+        "openswitch": true,
+        "peisong": 3
+
+      },
+      {
+        "shop": "霸王店",
+        "pay": false,
+        "money": 55,
+        "foods": [
+          {
+            "name": "三鲜水饺",
+            "num": 3,
+            "price": 15
+          }
+        ],
+        "openswitch": true,
+        "peisong": 3
+
+      }
+
+
+    ]
+  }
+}

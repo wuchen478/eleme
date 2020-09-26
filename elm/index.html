@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Title</title>
+     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+         <!-- 引入 Bootstrap -->
+         <link href="css/bootstrap.css"  rel="stylesheet">
+         <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+         <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+         <!--[if lt IE 9]-->
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" rel="external nofollow" ></script>
+    <link href="css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+<zhucecpn></zhucecpn>
+</div>
+<template id="zhuceTemp">
+
+</template>
+</body>
+<script src="js/jquery-3.3.1.js" rel="external nofollow"></script>
+<!-- 包括所有已编译的插件 -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/vue-resources.js"></script>
+<script src="js/vue-router.js"></script>
+<script>
+       let zhuceCpn=Vue.extend({
+           Template:'zhuceTemp'
+       })
+    let zhucecpn = Vue.component('zhucecpn',zhuceCpn);
+
+    const vue = new Vue({
+        el: "#app",
+        data: {
+
+
+        },
+    })
+       let routers = [
+
+           {path:'/zhuce',component:zhuceCpn},
+
+       ];
+</script>
+
+
+</html>

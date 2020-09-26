@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+<component02 v-on:xx="getb" v-bind:msg="a"></component02>
+    子组件向父组件传递{{c}}
+</div>
+<script src="js/vue.js"></script>
+<script>
+    const vue = new Vue({
+        el: "#app",
+        data: {
+            a: 1,
+            c:0
+        },
+        methods:{
+            getb:function (x){
+                this.c=x;
+            }
+        },
+        components: {
+            component02: {
+                template: `
+                    <h1>子组件 {{b}} {{msg}}</h1>
+               ` ,
+                data:function (){
+                    return {
+                        b:3
+                    }
+                },
+                props:{
+                    msg:{}
+                },
+                mounted:function (){
+                    this.$emit("xx",this.b)
+                }
+
+            }
+        },
+    })
+</script>
+</body>
+</html>

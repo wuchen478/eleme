@@ -1,0 +1,71 @@
+{
+  "datazoom": {
+    "shop": [
+      {
+        "url": "img/sj01.png",
+        "name": "万家饺子",
+        "send": "15起送|3元配送费",
+        "level": 5,
+        "grade": 4.7,
+        "statu": "一年卖一份",
+        "lab": "各种饺子",
+        "time": "3.22km|30分钟",
+        "sal": ["新用户加收3块钱","LOL王者3折" ],
+        "foods": [{
+          "name": "三鲜水饺",
+          "price":13,
+          "url": "img/dcfl06.png",
+          "num": 0
+        }]
+      },{
+        "url": "img/sj02.png",
+        "name": "万家饺子",
+        "send": "15起送|3元配送费",
+        "level": 5,
+        "grade": 4.7,
+        "statu": "一年卖一份",
+        "lab": "各种饺子",
+        "time": "3.22km|30分钟",
+        "sal": ["新用户加收3块钱","LOL王者3折" ],
+        "foods": [{
+          "name": "三鲜水饺",
+          "price":13,
+          "url": "img/dcfl06.png",
+          "num": 0
+        }]
+      },{
+        "url": "img/sj03.png",
+        "name": "麦当劳",
+        "send": "15起送|3元配送费",
+        "level": 5,
+        "grade": 4.7,
+        "statu": "一年卖一份",
+        "lab": "各种汉堡",
+        "time": "3.22km|30分钟",
+        "sal": ["新用户加收3块钱","LOL王者3折" ],
+        "foods": [{
+          "name": "汉堡",
+          "price":13,
+          "url": "img/dcfl06.png",
+          "num": 0
+        }]
+      },{
+        "url": "img/sj04.png",
+        "name": "万家美食",
+        "send": "15起送|3元配送费",
+        "level": 5,
+        "grade": 4.7,
+        "statu": "一年卖一份",
+        "lab": "各种饺子",
+        "time": "3.22km|30分钟",
+        "sal": ["新用户加收3块钱","LOL王者3折" ],
+        "foods": [{
+          "name": "三鲜水饺",
+          "price":13,
+          "url": "img/dcfl06.png",
+          "num": 0
+        }]
+      }
+    ]
+  }
+}
